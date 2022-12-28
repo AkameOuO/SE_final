@@ -1,0 +1,14 @@
+from flask import Flask, redirect
+
+app = Flask(__name__)
+
+@app.route("/")
+def main():
+    return """<h1>逢甲大學圖書薦購系統</h1><a href="/nid_login"><button>NID登入</button></a>"""
+
+@app.route("/")
+def login():
+    return redirect("https://judge.akameowo.ml/nid_login")
+
+if __name__ == "__main__":
+    app.run()
