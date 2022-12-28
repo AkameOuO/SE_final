@@ -1,6 +1,11 @@
-from flask import Flask, redirect, request
+from random import randbytes
+from datetime import timedelta
+from flask import Flask, redirect, request, session
 
 app = Flask(__name__)
+
+app.config["SECRET_KEY"] = randbytes(32)
+app.config['PERMANENT_SESSION_LIFETIME'] = timedelta(days=7)
 
 @app.route("/")
 def main():
@@ -12,7 +17,12 @@ def login():
 
 @app.route("/result")
 def result():
-    return "歡迎{type} {classname} {name}({id})！".format(**request.args)
+    session.update(request.args)
+    return redirect("/welcome")
+
+@app.route("/welcome")
+def welcome():
+    return "歡迎{type} {classname} {name}({id})！".format(**session)
 
 if __name__ == "__main__":
     app.run(host="0.0.0.0",port=8000)
